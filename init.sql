@@ -19,7 +19,7 @@ CREATE TABLE medicines (
 -- =========================
 CREATE TABLE orders (
   id SERIAL PRIMARY KEY,
-  status TEXT NOT NULL DEFAULT 'DRAFT',
+  status TEXT NOT NULL DEFAULT 'SENT',
   unit TEXT NOT NULL,
 
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
