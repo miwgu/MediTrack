@@ -1,28 +1,24 @@
 import { medicineRepository } from '../repositories/medicine.repository';
-import { MedicineFilters } from '../types/medicine.types';
+import { MedicineFilters, CreateMedicineDTO, UpdateMedicineDTO } from '../types/medicine.types';
 
 export const medicineService = {
   getAll: (filters: MedicineFilters) => {
-  return medicineRepository.findByFilter(
-    filters.name,
-    filters.atc_code,
-    filters.form
-   );
+  return medicineRepository.findByFilter(filters);
   },
 
   getById: async (id: number) => {
     return medicineRepository.findById(id);
   },
 
-  create: async (name: string, stock: number) => {
-    if (!name) throw new Error("name is required");
-    if (stock < 0) throw new Error("stock must be >= 0");
+  create: async (data: CreateMedicineDTO) => {
+   if (!data.name) throw new Error("name is required");
+   if (data.stock < 0) throw new Error("stock must be >= 0");
 
-    return medicineRepository.create(name, stock);
-  },
+   return medicineRepository.create(data);
+ },
 
-  update: async (id: number, name: string, stock: number) => {
-    return medicineRepository.update(id, name, stock);
+  update: async (id: number, data: UpdateMedicineDTO) => {
+    return medicineRepository.update(id, data);
   },
 
   delete: async (id: number) => {

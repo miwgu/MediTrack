@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { medicineService } from "../services/medicine.service";
+import { CreateMedicineDTO, UpdateMedicineDTO } from "../types/medicine.types";
 
 export const getAllMedicines = async (req: Request, res: Response): Promise<void> => {
   const { name, atc_code, form } = req.query;
@@ -17,21 +18,29 @@ export const getMedicineById = async (req: Request,res: Response): Promise<void>
   const id = Number(req.params.id);
   const data = await medicineService.getById(id);
 
+    if (!data) {
+    res.status(404).json({
+      message: "Medicine not found",
+    });
+
+    return;
+  }
+
   res.json(data);
 };
 
 export const createMedicine = async (req: Request, res: Response): Promise<void> => {
-  const { name, stock } = req.body;
+  const data: CreateMedicineDTO = req.body;
 
-  const created = await medicineService.create(name, stock);
+  const created = await medicineService.create(data);
   res.status(201).json(created);
 };
 
 export const updateMedicine = async (req: Request, res: Response): Promise<void> => {
   const id = Number(req.params.id);
-  const { name, stock } = req.body;
+  const data: UpdateMedicineDTO = req.body;
 
-  const updated = await medicineService.update(id, name, stock);
+  const updated = await medicineService.update(id, data);
   res.json(updated);
 };
 
