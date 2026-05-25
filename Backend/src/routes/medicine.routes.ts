@@ -1,8 +1,12 @@
 import { Router } from 'express';
-import { getMedicines } from '../controllers/medicine.controller';
+import * as medicineController from '../controllers/medicine.controller';
 
 const router = Router();
 
-router.get('/medicines', getMedicines);
+router.get("/", medicineController.getAllMedicines);
+router.get("/:id", medicineController.getMedicineById);
+router.post("/", medicineController.createMedicine);
+router.patch("/:id", medicineController.updateMedicine);
+router.delete("/:id", medicineController.deleteMedicine);
 
 export default router;
