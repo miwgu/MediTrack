@@ -1,0 +1,61 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: meditrack-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - meditrack-net-db
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: meditrack-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=${PORT}
+      - DB_HOST=${DB_HOST}               # Use service name for DB host
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    depends_on:
+      - postgres
+    networks:
+      - meditrack-net-db
+      - meditrack-net-frontend
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: meditrack-frontend
+    ports:
+      - "4173:5173"
+    environment:
+      VITE_BACKEND_URL: ${VITE_BACKEND_URL}
+    depends_on:
+      - backend
+    networks:
+      - meditrack-net-frontend
+
+networks:
+  meditrack-net-db:
+    driver: bridge
+
+  meditrack-net-frontend:
+    driver: bridge
+
+volumes:
+  postgres_data:
+

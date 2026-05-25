@@ -1,0 +1,14 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install -g ts-node typescript
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npx", "ts-node", "src/index.ts"]
