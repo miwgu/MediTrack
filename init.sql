@@ -4,7 +4,7 @@
 CREATE TABLE medicines (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
-   atc_code TEXT NOT NULL,
+  atc_code TEXT NOT NULL,
   form TEXT,
   strength TEXT,
   stock INT NOT NULL DEFAULT 0,
