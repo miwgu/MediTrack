@@ -4,6 +4,10 @@ export type OrderStatus =
   | "CONFIRMED"
   | "DELIVERED";
 
+export type OrderFilters = {
+  unit?: string;
+};
+
 export type Order = {
   id: number;
   status: OrderStatus;

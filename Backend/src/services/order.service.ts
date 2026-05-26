@@ -1,5 +1,5 @@
 import { orderRepository } from "../repositories/order.repository";
-import { CreateOrderDTO, UpdateOrderStatusDTO, OrderStatus } from "../types/order.types";
+import { OrderFilters, CreateOrderDTO, UpdateOrderStatusDTO, OrderStatus } from "../types/order.types";
 
 const allowedTransitions: Record<OrderStatus, OrderStatus[]> = {
 // DRAFT is intentionally not stored in DB (handled via localStorage on the frontend).
@@ -12,8 +12,8 @@ const allowedTransitions: Record<OrderStatus, OrderStatus[]> = {
 
 export const orderService = {
 
-  getAll: () => {
-    return orderRepository.findAll();
+  getAll: (filters: OrderFilters) => {
+    return orderRepository.findAll(filters);
   },
 
   getById: async (id: number) => {

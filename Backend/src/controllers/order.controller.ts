@@ -1,9 +1,15 @@
 import { Request, Response } from "express";
 import { orderService } from "../services/order.service";
-import { CreateOrderDTO, UpdateOrderStatusDTO } from "../types/order.types";
+import { OrderFilters, CreateOrderDTO, UpdateOrderStatusDTO } from "../types/order.types";
 
 export const getAllOrders = async (req: Request, res: Response): Promise<void> => {
-  const data = await orderService.getAll();
+  const { unit } = req.query;
+
+  const filters: OrderFilters = {
+    unit: unit as string,
+  };
+
+  const data = await orderService.getAll(filters);
   res.json(data);
 };
 

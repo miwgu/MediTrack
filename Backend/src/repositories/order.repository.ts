@@ -1,11 +1,16 @@
 import { db } from "../db/db";
-import { Order, OrderWithItems, CreateOrderDTO } from "../types/order.types";
+import { OrderFilters, Order, OrderWithItems, CreateOrderDTO } from "../types/order.types";
 
 export const orderRepository = {
 
-  async findAll(): Promise<OrderWithItems[]> {
+  async findAll(filters: OrderFilters): Promise<OrderWithItems[]> {
+    const { unit } = filters;
+
     const ordersResult = await db.query(
-      "SELECT * FROM orders ORDER BY created_at DESC"
+      `SELECT * FROM orders
+      WHERE ($1::text IS NULL OR unit ILIKE '%' || $1 || '%')
+      ORDER BY created_at DESC`,
+      [unit ?? null]
     );
 
     const orders = ordersResult.rows;
