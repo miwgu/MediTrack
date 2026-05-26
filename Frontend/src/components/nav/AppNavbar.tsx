@@ -16,7 +16,7 @@ const ROLE_ICONS: Record<Role, string> = {
 function AppNavbar() {
   const { role, setRole, clearRole } = useRole();
   const navigate = useNavigate();
-  const { items } = useOrderRequest();
+  const { items, clearItems } = useOrderRequest();
 
   return (
     <Navbar bg="light" expand="lg" className="border-bottom" style={{ position: 'sticky', top: 0, zIndex: 1030 }}>
@@ -54,6 +54,7 @@ function AppNavbar() {
               <NavDropdown.Item onClick={() => setRole('WAREHOUSE')}>🏭 Warehouse</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item onClick={() => {
+                  clearItems()
                   clearRole();
                   navigate('/');
                 }}>
