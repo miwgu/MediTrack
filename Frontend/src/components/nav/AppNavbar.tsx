@@ -28,7 +28,7 @@ function AppNavbar() {
             <Nav.Link href="/warehouse">Warehouse</Nav.Link>
           )}
           {role === 'NURSE' && (
-            <Nav.Link href="/cart">Cart</Nav.Link>
+            <Nav.Link href="/order-request">Order Request</Nav.Link>
           )}
         </Nav>
 

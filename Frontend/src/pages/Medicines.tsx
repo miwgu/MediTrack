@@ -7,6 +7,7 @@ import { Medicine, MedicineForm } from '../types/medicine.types';
 import MedicineSearchBar from '../components/medicine/MedicineSeaechBar';
 import MedicineTable from '../components/medicine/MedicineTable';
 import { useRole } from '../context/RoleContext';
+import { useOrderRequest } from '../hooks/useOrderRequest';
 
 function Medicines() {
   const { role } = useRole();
@@ -36,8 +37,9 @@ function Medicines() {
     fetchMedicines();
   }, [fetchMedicines]);
 
+  const { addItem } = useOrderRequest();
   const handleAddToOrder = (medicine: Medicine) => {
-    // Cart logic — next step
+    addItem(medicine)
     console.log('Add to order:', medicine);
   };
 
