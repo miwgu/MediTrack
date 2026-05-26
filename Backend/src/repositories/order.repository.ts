@@ -33,11 +33,22 @@ export const orderRepository = {
     const orderResult = await db.query(
       "SELECT * FROM orders WHERE id = $1", [id]
     );
-
     if (!orderResult.rows[0]) return null;
 
     const itemsResult = await db.query(
-      "SELECT * FROM order_items WHERE order_id = $1", [id]
+      `SELECT 
+        oi.id,
+        oi.order_id,
+        oi.medicine_id,
+        oi.quantity,
+        m.name AS medicine_name,
+        m.atc_code AS medicine_atc_code,
+        m.form AS medicine_form,
+        m.strength AS medicine_strength
+      FROM order_items oi
+      JOIN medicines m ON m.id = oi.medicine_id
+      WHERE oi.order_id = $1`,
+      [id]
     );
 
     return {

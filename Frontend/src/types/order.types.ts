@@ -23,6 +23,10 @@ export type OrderItem = {
   order_id: number;
   medicine_id: number;
   quantity: number;
+  medicine_name?: string;
+  medicine_atc_code?: string;
+  medicine_form?: string;
+  medicine_strength?: string;
 };
 
 export type OrderWithItems = {
