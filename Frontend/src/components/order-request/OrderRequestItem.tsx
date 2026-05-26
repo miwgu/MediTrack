@@ -1,7 +1,7 @@
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { Trash } from 'react-bootstrap-icons';
-import { RequestItem } from '../../hooks/useOrderRequest';
+import { RequestItem } from '../../context/OrderRequestContext';
 import { getMedicineUnit } from '../medicine/medicineUnit';
 import { MedicineForm } from '../../types/medicine.types';
 import Form from 'react-bootstrap/Form';
