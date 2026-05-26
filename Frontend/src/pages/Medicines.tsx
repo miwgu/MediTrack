@@ -7,7 +7,8 @@ import { Medicine, MedicineForm } from '../types/medicine.types';
 import MedicineSearchBar from '../components/medicine/MedicineSeaechBar';
 import MedicineTable from '../components/medicine/MedicineTable';
 import { useRole } from '../context/RoleContext';
-import { useOrderRequest } from '../hooks/useOrderRequest';
+import { useOrderRequest } from './../context/OrderRequestContext';
+import RequestToast from '../components/common/RequestToast';
 
 function Medicines() {
   const { role } = useRole();
@@ -38,9 +39,14 @@ function Medicines() {
   }, [fetchMedicines]);
 
   const { addItem } = useOrderRequest();
+  const [toastShow, setToastShow] = useState(false);
+  const [toastMedicine, setToastMedicine] = useState('');
+  
   const handleAddToOrder = (medicine: Medicine) => {
     addItem(medicine)
     console.log('Add to order:', medicine);
+    setToastMedicine(medicine.name);
+    setToastShow(true);
   };
 
   const handleDelete = async (id: number) => {
@@ -56,6 +62,12 @@ function Medicines() {
 
   return (
     <Container className="py-4">
+
+      <RequestToast
+      show={toastShow}
+      medicineName={toastMedicine}
+      onClose={() => setToastShow(false)}
+    />
 
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">

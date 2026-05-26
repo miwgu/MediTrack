@@ -5,6 +5,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Badge from 'react-bootstrap/Badge';
 import { useRole, Role } from '../../context/RoleContext';
 import { useNavigate } from 'react-router-dom';
+import { useOrderRequest } from '../../context/OrderRequestContext';
 
 const ROLE_ICONS: Record<Role, string> = {
   NURSE: '🏥',
@@ -15,6 +16,7 @@ const ROLE_ICONS: Record<Role, string> = {
 function AppNavbar() {
   const { role, setRole, clearRole } = useRole();
   const navigate = useNavigate();
+  const { items } = useOrderRequest();
 
   return (
     <Navbar bg="light" expand="lg" className="border-bottom" style={{ position: 'sticky', top: 0, zIndex: 1030 }}>
@@ -28,7 +30,14 @@ function AppNavbar() {
             <Nav.Link href="/warehouse">Warehouse</Nav.Link>
           )}
           {role === 'NURSE' && (
-            <Nav.Link href="/order-request">Order Request</Nav.Link>
+            <Nav.Link href="/order-request">
+              Order Request{' '}
+              {items.length > 0 && (
+                <Badge bg="primary" pill>
+                  {items.length}
+                </Badge>
+              )}
+            </Nav.Link>
           )}
         </Nav>
 

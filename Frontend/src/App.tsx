@@ -5,19 +5,22 @@ import Medicines from './pages/Medicines';
 import OrderRequest from './pages/OrderRequest';
 import Orders from './pages/Orders';
 import AppNavbar from './components/nav/AppNavbar';
+import { OrderRequestProvider } from './context/OrderRequestContext';
 
 function App() {
 
   return (
     <>
       <RoleProvider>
-        <AppNavbar />
-        <Routes>
-            <Route path="/" element={<Login/>} />
-            <Route path="/medicines" element={<Medicines/>} />
-            <Route path="/order-request" element={<OrderRequest />} />
-            <Route path="/orders" element={<Orders/>} />
-        </Routes>
+        <OrderRequestProvider> 
+          <AppNavbar />
+          <Routes>
+              <Route path="/" element={<Login/>} />
+              <Route path="/medicines" element={<Medicines/>} />
+              <Route path="/order-request" element={<OrderRequest />} />
+              <Route path="/orders" element={<Orders/>} />
+          </Routes>
+        </OrderRequestProvider>
       </RoleProvider>
     </>
   );

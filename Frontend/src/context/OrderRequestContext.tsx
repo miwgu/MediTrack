@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Medicine } from '../types/medicine.types';
 
 export type RequestItem = {
@@ -8,7 +8,17 @@ export type RequestItem = {
 
 const STORAGE_KEY = 'order_request';
 
-export function useOrderRequest() {
+type OrderRequestContextType = {
+  items: RequestItem[];
+  addItem: (medicine: Medicine) => void;
+  updateQuantity: (medicineId: number, quantity: number) => void;
+  removeItem: (medicineId: number) => void;
+  clearItems: () => void;
+};
+
+const OrderRequestContext = createContext<OrderRequestContextType | null>(null);
+
+export function OrderRequestProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<RequestItem[]>(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -50,9 +60,17 @@ export function useOrderRequest() {
     setItems(prev => prev.filter(i => i.medicine.id !== medicineId));
   };
 
-  const clearItems = () => {
-    setItems([]);
-  };
+  const clearItems = () => setItems([]);
 
-  return { items, addItem, updateQuantity, removeItem, clearItems };
+  return (
+    <OrderRequestContext.Provider value={{ items, addItem, updateQuantity, removeItem, clearItems }}>
+      {children}
+    </OrderRequestContext.Provider>
+  );
+}
+
+export function useOrderRequest() {
+  const context = useContext(OrderRequestContext);
+  if (!context) throw new Error('useOrderRequest must be used within OrderRequestProvider');
+  return context;
 }

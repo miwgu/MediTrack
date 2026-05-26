@@ -25,7 +25,7 @@ function MedicineTable({ medicines, onAddToOrder, onEdit, onDelete }: Props) {
   return (
     <>
       <div style={{ maxHeight: '520px', overflowY: 'scroll',  overflowX: 'auto', border: '1px solid #dee2e6', borderRadius: '6px', WebkitOverflowScrolling: 'touch', }}>
-        <Table hover className="align-middle mb-0" style={{ minWidth: '650px' }}> {/* ← 最小幅設定 */}
+        <Table hover className="align-middle mb-0" style={{ minWidth: '650px' }}>
             <thead className="table-light sticky-top">
             <tr>
                 <th style={{ position: 'sticky', left: 0, zIndex: 2, backgroundColor: '#f8f9fa', minWidth: '140px' }}>
@@ -43,7 +43,7 @@ function MedicineTable({ medicines, onAddToOrder, onEdit, onDelete }: Props) {
                 <tr key={med.id}>
                 <td
                     className="fw-semibold"
-                    style={{ position: 'sticky', left: 0, zIndex: 1, backgroundColor: 'white' }}  // ← 左固定
+                    style={{ position: 'sticky', left: 0, zIndex: 1, backgroundColor: 'white' }}
                 >
                     {med.name}
                 </td>
