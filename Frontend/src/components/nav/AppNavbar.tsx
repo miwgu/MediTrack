@@ -13,7 +13,7 @@ const ROLE_ICONS: Record<Role, string> = {
 };
 
 function AppNavbar() {
-  const { role, setRole } = useRole();
+  const { role, setRole, clearRole } = useRole();
   const navigate = useNavigate();
 
   return (
@@ -44,7 +44,11 @@ function AppNavbar() {
               <NavDropdown.Item onClick={() => setRole('PHARMACIST')}>💊 Pharmacist</NavDropdown.Item>
               <NavDropdown.Item onClick={() => setRole('WAREHOUSE')}>🏭 Warehouse</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item onClick={() => navigate('/')}>Logout</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => {
+                  clearRole();
+                  navigate('/');
+                }}>
+                Logout</NavDropdown.Item>
             </NavDropdown>
           ) : (
             <Nav.Link href="/">Login</Nav.Link>
