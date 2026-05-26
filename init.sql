@@ -81,17 +81,33 @@ VALUES
 -- =========================
 INSERT INTO orders (status, unit, created_at, updated_at)
 VALUES
-('DRAFT', 'ICU', NOW() - INTERVAL '3 days', NOW() - INTERVAL '3 days'),
-('SENT', 'ER', NOW() - INTERVAL '2 days', NOW() - INTERVAL '2 days'),
-('CONFIRMED', 'WARD A', NOW() - INTERVAL '1 day', NOW() - INTERVAL '1 day'),
-('DELIVERED', 'ICU', NOW(), NOW());
-
+('DRAFT',     'WARD B', NOW() - INTERVAL '6 days', NOW() - INTERVAL '6 days'),
+('SENT',      'ICU',    NOW() - INTERVAL '5 days', NOW() - INTERVAL '5 days'),
+('SENT',      'WARD B', NOW() - INTERVAL '4 days', NOW() - INTERVAL '4 days'),
+('CONFIRMED', 'ER',     NOW() - INTERVAL '3 days', NOW() - INTERVAL '2 days'),
+('CONFIRMED', 'ICU',    NOW() - INTERVAL '2 days', NOW() - INTERVAL '1 day'),
+('DELIVERED', 'WARD A', NOW() - INTERVAL '3 days', NOW() - INTERVAL '1 day'),
+('DELIVERED', 'ER',     NOW() - INTERVAL '2 days', NOW()),
+('SENT',      'WARD C', NOW() - INTERVAL '1 day',  NOW() - INTERVAL '1 day'),
+('DELIVERED', 'ICU',    NOW() - INTERVAL '6 days', NOW() - INTERVAL '3 days');
 -- =========================
 -- SEED DATA: ORDER ITEMS
 -- =========================
 INSERT INTO order_items (order_id, medicine_id, quantity)
 VALUES
-(2, 1, 2),
-(2, 2, 1),
-(3, 3, 5),
-(4, 4, 2);
+(1,  1, 20),
+(2,  8, 5),
+(3,  2, 10),
+(3,  5, 3),
+(4,  3, 8),
+(4,  6, 2),
+(5,  4, 15),
+(5,  7, 4),
+(6,  9, 6),
+(6, 10, 12),
+(7,  1, 30),
+(7,  3, 5),
+(8,  2, 8),
+(8,  4, 7),
+(9,  5, 4),
+(9,  6, 10);

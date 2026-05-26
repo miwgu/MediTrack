@@ -4,8 +4,17 @@ import Col from 'react-bootstrap/Col';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { Search } from 'react-bootstrap-icons';
 import { OrderStatus } from '../../types/order.types';
+import { useRole } from '../../context/RoleContext';
 
-const STATUS_OPTIONS: { value: OrderStatus | ''; label: string }[] = [
+const ALL_STATUS_OPTIONS: { value: OrderStatus | ''; label: string }[] = [
+  { value: '',          label: 'All Statuses' },
+  { value: 'DRAFT',     label: 'Draft' },
+  { value: 'SENT',      label: 'Sent' },
+  { value: 'CONFIRMED', label: 'Confirmed' },
+  { value: 'DELIVERED', label: 'Delivered' },
+];
+
+const STAFF_STATUS_OPTIONS: { value: OrderStatus | ''; label: string }[] = [
   { value: '',          label: 'All Statuses' },
   { value: 'SENT',      label: 'Sent' },
   { value: 'CONFIRMED', label: 'Confirmed' },
@@ -22,7 +31,10 @@ type Props = {
 };
 
 function OrderSearchBar({ orderId, unit, status, onOrderIdChange, onUnitChange, onStatusChange }: Props) {
-  return (
+    const { role } = useRole();
+    const statusOptions = role === 'NURSE' ? ALL_STATUS_OPTIONS : STAFF_STATUS_OPTIONS;
+
+    return (
     <Row className="g-2 mb-3">
       <Col xs={12} md={3}>
         <InputGroup>
@@ -51,7 +63,7 @@ function OrderSearchBar({ orderId, unit, status, onOrderIdChange, onUnitChange, 
           value={status}
           onChange={(e) => onStatusChange(e.target.value as OrderStatus | '')}
         >
-          {STATUS_OPTIONS.map(o => (
+          {statusOptions.map(o => (
             <option key={o.value} value={o.value}>{o.label}</option>
           ))}
         </Form.Select>

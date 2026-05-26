@@ -25,7 +25,13 @@ function Orders() {
         status: status || undefined,
         id: orderId ? Number(orderId) : undefined,
       });
-      setOrders(data);
+
+      const filtered = role === 'NURSE'
+      ? data
+      : data.filter(o => o.status !== 'DRAFT');
+
+      setOrders(filtered);
+
     } catch {
       setError('Failed to load orders. Please try again.');
     } finally {
