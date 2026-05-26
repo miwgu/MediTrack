@@ -17,7 +17,7 @@ function AppNavbar() {
   const navigate = useNavigate();
 
   return (
-    <Navbar bg="light" expand="lg" className="border-bottom">
+    <Navbar bg="light" expand="lg" className="border-bottom" style={{ position: 'sticky', top: 0, zIndex: 1030 }}>
       <Container>
         <Navbar.Brand href="/medicines">💊 MediTrack</Navbar.Brand>
 
