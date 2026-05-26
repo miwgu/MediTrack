@@ -17,18 +17,16 @@ export const medicineRepository = {
   },
 
   async findByFilter(filters: MedicineFilters): Promise<Medicine[]> {
-    const { name, atc_code, form } = filters;
+    const { search, form } = filters;
     const result = await db.query(
-        `
-        SELECT * FROM medicines
-        WHERE ($1::text IS NULL OR name ILIKE '%' || $1 || '%')
-        AND ($2::text IS NULL OR atc_code ILIKE '%' || $2 || '%')
-        AND ($3::text IS NULL OR form ILIKE '%' || $3 || '%')
-        ORDER BY id ASC
-        `,
-        [name ?? null, atc_code ?? null, form ?? null]
-  );
-
+      `
+      SELECT * FROM medicines
+      WHERE ($1::text IS NULL OR name ILIKE '%' || $1 || '%' OR atc_code ILIKE '%' || $1 || '%')
+      AND ($2::text IS NULL OR form ILIKE '%' || $2 || '%')
+      ORDER BY id ASC
+      `,
+      [search ?? null, form ?? null]
+    );
     return result.rows;
   },
 

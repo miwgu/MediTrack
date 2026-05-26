@@ -1,14 +1,13 @@
 import { Request, Response } from "express";
 import { medicineService } from "../services/medicine.service";
-import { CreateMedicineDTO, UpdateMedicineDTO } from "../types/medicine.types";
+import { MedicineForm, CreateMedicineDTO, UpdateMedicineDTO } from "../types/medicine.types";
 
 export const getAllMedicines = async (req: Request, res: Response): Promise<void> => {
-  const { name, atc_code, form } = req.query;
+  const { search, form } = req.query;
 
   const data = await medicineService.getAll({
-    name: name as string,
-    atc_code: atc_code as string,
-    form: form as string,
+    search: search as string,
+    form: form as MedicineForm,
   });
 
   res.json(data);

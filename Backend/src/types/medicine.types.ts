@@ -1,3 +1,5 @@
+export type MedicineForm = "tablet" | "capsule" | "injection" | "inhalation";
+
 export type Medicine = {
   id: number;
   name: string;
@@ -29,7 +31,6 @@ export type UpdateMedicineDTO = {
 };
 
 export type MedicineFilters = {
-  name?: string;
-  atc_code?: string;
-  form?: string;
+  search?: string;
+  form?: MedicineForm;
 };
