@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-
+import { RoleProvider } from './context/RoleContext';
 import Login from './pages/Login';
 import Medicines from './pages/Medicines';
 import Orders from './pages/Orders';
@@ -9,13 +9,14 @@ function App() {
 
   return (
     <>
-      <AppNavbar/>
-
-      <Routes>
-          <Route path="/" element={<Login/>} />
-          <Route path="/medicines" element={<Medicines/>} />
-          <Route path="/orders" element={<Orders/>} />
-      </Routes>
+      <RoleProvider>
+        <AppNavbar />
+        <Routes>
+            <Route path="/" element={<Login/>} />
+            <Route path="/medicines" element={<Medicines/>} />
+            <Route path="/orders" element={<Orders/>} />
+        </Routes>
+      </RoleProvider>
     </>
   );
 }

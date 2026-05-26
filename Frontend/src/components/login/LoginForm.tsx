@@ -1,39 +1,34 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useState } from 'react';
+import { useRole, Role } from '../../context/RoleContext';
+import { useNavigate } from 'react-router-dom';
 
-type Role = 'NURSE' | 'PHARMACIST' | 'ADMIN';
+function LoginForm() {
+  const [selected, setSelected] = useState<Role>('NURSE');
+  const { setRole } = useRole();
+  const navigate = useNavigate();
 
-type Props = {
-  onLogin?: (role: Role) => void;
-};
-
-function LoginForm({ onLogin }: Props) {
-  const [role, setRole] = useState<Role>('NURSE');
+  const handleLogin = () => {
+    setRole(selected);
+    navigate('/medicines');
+  };
 
   return (
     <Form>
       <Form.Group className="mb-3">
         <Form.Label>Login as</Form.Label>
-
         <Form.Select
-          value={role}
-          onChange={(e) => setRole(e.target.value as Role)}
+          value={selected}
+          onChange={(e) => setSelected(e.target.value as Role)}
         >
-          <option value="NURSE">Nurse</option>
-          <option value="PHARMACIST">Pharmacist</option>
-          <option value="ADMIN">Admin</option>
+          <option value="NURSE">🏥 Nurse</option>
+          <option value="PHARMACIST">💊 Pharmacist</option>
+          <option value="WAREHOUSE">🏭 Warehouse</option>
         </Form.Select>
       </Form.Group>
 
-      <Button
-        variant="primary"
-        type="button"
-        className="w-100"
-        onClick={() => {
-          if (onLogin) onLogin(role);
-        }}
-      >
+      <Button variant="primary" className="w-100" onClick={handleLogin}>
         Enter MediTrack
       </Button>
     </Form>
