@@ -8,12 +8,10 @@ function AppNavbar() {
     <Navbar bg="light" expand="lg" className="border-bottom">
       <Container>
 
-        {/* ロゴ */}
         <Navbar.Brand href="/">
           MediTrack
         </Navbar.Brand>
 
-        {/* 右側 */}
         <Nav className="ms-auto">
           <NavDropdown title="👤 User" id="user-dropdown" align="end">
 
