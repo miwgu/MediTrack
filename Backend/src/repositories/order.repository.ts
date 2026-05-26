@@ -4,13 +4,14 @@ import { OrderFilters, Order, OrderWithItems, CreateOrderDTO } from "../types/or
 export const orderRepository = {
 
   async findAll(filters: OrderFilters): Promise<OrderWithItems[]> {
-    const { unit } = filters;
+    const { unit, status } = filters;
 
     const ordersResult = await db.query(
-      `SELECT * FROM orders
+     `SELECT * FROM orders
       WHERE ($1::text IS NULL OR unit ILIKE '%' || $1 || '%')
+      AND ($2::text IS NULL OR status = $2)
       ORDER BY created_at DESC`,
-      [unit ?? null]
+      [unit ?? null, status ?? null]
     );
 
     const orders = ordersResult.rows;

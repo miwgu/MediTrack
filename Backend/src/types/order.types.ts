@@ -6,6 +6,7 @@ export type OrderStatus =
 
 export type OrderFilters = {
   unit?: string;
+  status?: OrderStatus; 
 };
 
 export type Order = {
