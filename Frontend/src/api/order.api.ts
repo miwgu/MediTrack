@@ -3,10 +3,11 @@ import { OrderWithItems, CreateOrderDTO, OrderStatus } from '../types/order.type
 const BASE_URL = 'http://localhost:3000/api/orders';
 
 export const orderApi = {
-  getAll: async (filters: { unit?: string; status?: OrderStatus } = {}): Promise<OrderWithItems[]> => {
+  getAll: async (filters: { unit?: string; status?: OrderStatus; id?: number } = {}): Promise<OrderWithItems[]> => {
     const params = new URLSearchParams();
     if (filters.unit) params.append('unit', filters.unit);
     if (filters.status) params.append('status', filters.status);
+    if (filters.id) params.append('id', String(filters.id));
 
     const res = await fetch(`${BASE_URL}?${params.toString()}`);
     return res.json();
