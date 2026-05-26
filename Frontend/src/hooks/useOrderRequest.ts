@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Medicine } from '../types/medicine.types';
 
-export type CartItem = {
+export type RequestItem = {
   medicine: Medicine;
   quantity: number;
 };
@@ -9,7 +9,7 @@ export type CartItem = {
 const STORAGE_KEY = 'order_request';
 
 export function useOrderRequest() {
-  const [items, setItems] = useState<CartItem[]>(() => {
+  const [items, setItems] = useState<RequestItem[]>(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       return stored ? JSON.parse(stored) : [];
@@ -26,7 +26,6 @@ export function useOrderRequest() {
     setItems(prev => {
       const existing = prev.find(i => i.medicine.id === medicine.id);
       if (existing) {
-        // すでにある場合は数量+1
         return prev.map(i =>
           i.medicine.id === medicine.id
             ? { ...i, quantity: i.quantity + 1 }

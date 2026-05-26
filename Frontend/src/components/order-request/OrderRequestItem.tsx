@@ -1,14 +1,14 @@
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { Trash } from 'react-bootstrap-icons';
-import { CartItem } from '../../hooks/useOrderRequest';
+import { RequestItem } from '../../hooks/useOrderRequest';
 import { getMedicineUnit } from '../medicine/medicineUnit';
 import { MedicineForm } from '../../types/medicine.types';
 import Form from 'react-bootstrap/Form';
 import { useState, useEffect } from 'react';
 
 type Props = {
-  item: CartItem;
+  item: RequestItem;
   onUpdateQuantity: (medicineId: number, quantity: number) => void;
   onRemove: (medicineId: number) => void;
 };
