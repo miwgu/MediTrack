@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Medicines from './pages/Medicines';
 import OrderRequest from './pages/OrderRequest';
 import Orders from './pages/Orders';
+import OrderDetail from './pages/OrderDetail';
 import AppNavbar from './components/nav/AppNavbar';
 import { OrderRequestProvider } from './context/OrderRequestContext';
 
@@ -19,6 +20,7 @@ function App() {
               <Route path="/medicines" element={<Medicines/>} />
               <Route path="/order-request" element={<OrderRequest />} />
               <Route path="/orders" element={<Orders/>} />
+              <Route path="/orders/:id" element={<OrderDetail />} />
           </Routes>
         </OrderRequestProvider>
       </RoleProvider>
