@@ -6,20 +6,26 @@ import { Search } from 'react-bootstrap-icons';
 import { OrderStatus } from '../../types/order.types';
 import { useRole } from '../../context/RoleContext';
 
-const ALL_STATUS_OPTIONS: { value: OrderStatus | ''; label: string }[] = [
-  { value: '',          label: 'All Statuses' },
-  { value: 'DRAFT',     label: 'Draft' },
-  { value: 'SENT',      label: 'Sent' },
-  { value: 'CONFIRMED', label: 'Confirmed' },
-  { value: 'DELIVERED', label: 'Delivered' },
-];
-
-const STAFF_STATUS_OPTIONS: { value: OrderStatus | ''; label: string }[] = [
-  { value: '',          label: 'All Statuses' },
-  { value: 'SENT',      label: 'Sent' },
-  { value: 'CONFIRMED', label: 'Confirmed' },
-  { value: 'DELIVERED', label: 'Delivered' },
-];
+  const STATUS_OPTIONS: Record<string, { value: OrderStatus | ''; label: string }[]> = {
+    NURSE: [
+        { value: '',          label: 'All Statuses' },
+        { value: 'DRAFT',     label: 'Draft' },
+        { value: 'SENT',      label: 'Sent' },
+        { value: 'CONFIRMED', label: 'Confirmed' },
+        { value: 'DELIVERED', label: 'Delivered' },
+    ],
+    PHARMACIST: [
+        { value: '',          label: 'All Statuses' },
+        { value: 'SENT',      label: 'Sent' },
+        { value: 'CONFIRMED', label: 'Confirmed' },
+        { value: 'DELIVERED', label: 'Delivered' },
+    ],
+    WAREHOUSE: [
+        { value: '',          label: 'All Statuses' },
+        { value: 'CONFIRMED', label: 'Confirmed' },
+        { value: 'DELIVERED', label: 'Delivered' },
+    ],
+    };
 
 type Props = {
   orderId: string;
@@ -32,7 +38,7 @@ type Props = {
 
 function OrderSearchBar({ orderId, unit, status, onOrderIdChange, onUnitChange, onStatusChange }: Props) {
     const { role } = useRole();
-    const statusOptions = role === 'NURSE' ? ALL_STATUS_OPTIONS : STAFF_STATUS_OPTIONS;
+    const statusOptions = STATUS_OPTIONS[role ?? 'NURSE'];
 
     return (
     <Row className="g-2 mb-3">

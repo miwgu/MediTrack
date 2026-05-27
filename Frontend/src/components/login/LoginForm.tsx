@@ -10,9 +10,14 @@ function LoginForm() {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    setRole(selected);
+  setRole(selected);
+
+  if (selected === 'WAREHOUSE') {
+    navigate('/orders');
+  } else {
     navigate('/medicines');
-  };
+  }
+};
 
   return (
     <Form>

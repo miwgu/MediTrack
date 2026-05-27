@@ -18,24 +18,26 @@ function AppNavbar() {
   const navigate = useNavigate();
   const { items, clearItems } = useOrderRequest();
 
+  const homePath =
+  role === 'WAREHOUSE'
+    ? '/orders'
+    : '/medicines';
+
   return (
     <Navbar bg="light" expand="lg" className="border-bottom" style={{ position: 'sticky', top: 0, zIndex: 1030 }}>
       <Container>
-        <Navbar.Brand href="/medicines">💊 MediTrack</Navbar.Brand>
+        <Navbar.Brand href={homePath}>💊 MediTrack</Navbar.Brand>
 
         <Nav className="me-auto">
-          <Nav.Link href="/medicines">Medicines</Nav.Link>
-          <Nav.Link href="/orders">Orders</Nav.Link>
-          {role === 'WAREHOUSE' && (
-            <Nav.Link href="/warehouse">Warehouse</Nav.Link>
+          {role !== 'WAREHOUSE' && (
+            <Nav.Link href="/medicines">Medicines</Nav.Link>
           )}
+          <Nav.Link href="/orders">Orders</Nav.Link>
           {role === 'NURSE' && (
             <Nav.Link href="/order-request">
               Order Request{' '}
               {items.length > 0 && (
-                <Badge bg="primary" pill>
-                  {items.length}
-                </Badge>
+                <Badge bg="primary" pill>{items.length}</Badge>
               )}
             </Nav.Link>
           )}

@@ -16,6 +16,19 @@ function Orders() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const getFilteredOrders = (orders: OrderWithItems[]) => {
+    switch (role) {
+      case 'NURSE':
+        return orders; // All status
+      case 'PHARMACIST':
+        return orders.filter(o => o.status !== 'DRAFT');
+      case 'WAREHOUSE':
+        return orders.filter(o => o.status === 'CONFIRMED' || o.status === 'DELIVERED');
+      default:
+        return orders;
+    }
+ };
+
   const fetchOrders = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -26,11 +39,7 @@ function Orders() {
         id: orderId ? Number(orderId) : undefined,
       });
 
-      const filtered = role === 'NURSE'
-      ? data
-      : data.filter(o => o.status !== 'DRAFT');
-
-      setOrders(filtered);
+      setOrders(getFilteredOrders(data));
 
     } catch {
       setError('Failed to load orders. Please try again.');
