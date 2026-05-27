@@ -1,6 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import { OrderWithItems } from '../../types/order.types';
 import { useRole } from '../../context/RoleContext';
+import { FaTruck } from "react-icons/fa";
 
 type Props = {
   order: OrderWithItems;
@@ -35,7 +36,12 @@ function OrderActionButton({ order, onUpdate, updating }: Props) {
           onClick={() => onUpdate('DELIVERED')}
           disabled={updating}
         >
-          {updating ? 'Updating...' : '🚚 Mark as Delivered'}
+          {updating ? 'Updating...' : 
+          <>
+            <FaTruck className="me-1" />
+            Mark as Delivered
+          </>   
+          }
         </Button>
       </div>
     );

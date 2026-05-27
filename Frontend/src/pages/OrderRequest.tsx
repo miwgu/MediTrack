@@ -8,11 +8,14 @@ import { useOrderRequest } from './../context/OrderRequestContext';
 import { orderApi } from '../api/order.api';
 import OrderRequestItem from '../components/order-request/OrderRequestItem';
 import UnitSelector from '../components/order-request/UnitSelector';
+import OrderSuccessModal from '../components/order-request/OrderSuccessModal';
 
 function OrderRequest() {
   const { items, updateQuantity, removeItem, clearItems } = useOrderRequest();
   const [unit, setUnit] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [createdOrderId, setCreatedOrderId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -30,7 +33,7 @@ function OrderRequest() {
     setError(null);
 
     try {
-      await orderApi.create({
+      const created = await orderApi.create({
         unit,
         items: items.map(i => ({
           medicine_id: i.medicine.id,
@@ -38,7 +41,8 @@ function OrderRequest() {
         })),
       });
       clearItems();
-      navigate('/orders');
+      setCreatedOrderId(created.id);    // Save order id
+      setShowSuccessModal(true);        // show success modal
     } catch {
       setError('Failed to send request. Please try again.');
     } finally {
@@ -48,7 +52,15 @@ function OrderRequest() {
 
   return (
     <Container className="py-4" style={{ maxWidth: '680px' }}>
-
+        
+        <OrderSuccessModal
+        show={showSuccessModal}
+        orderId={createdOrderId}
+        onClose={() => {
+            setShowSuccessModal(false);
+            navigate('/orders');  // redirect to orders when modal is closed
+        }}
+        />
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>

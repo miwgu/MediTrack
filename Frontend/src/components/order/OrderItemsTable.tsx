@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card';
 import { OrderItem } from '../../types/order.types';
 import { getMedicineUnit } from '../medicine/medicineUnit';
 import { MedicineForm } from '../../types/medicine.types';
+import { GiMedicines } from "react-icons/gi";
 
 type Props = {
   items: OrderItem[];
@@ -11,7 +12,7 @@ type Props = {
 function OrderItemsTable({ items }: Props) {
   return (
     <Card className="mb-3 shadow-sm">
-      <Card.Header className="fw-semibold">💊 Medicines</Card.Header>
+      <Card.Header className="fw-semibold"><GiMedicines /> Medicines</Card.Header>
       <Card.Body className="p-0">
         <Table className="align-middle mb-0">
           <thead className="table-light">
