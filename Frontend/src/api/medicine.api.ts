@@ -23,6 +23,12 @@ export const medicineApi = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
+
+    if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || 'Failed to create medicine');
+   }
+
     return res.json();
   },
 
@@ -32,6 +38,12 @@ export const medicineApi = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
+
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.message || 'Failed to update medicine');
+    }
+
     return res.json();
   },
 
