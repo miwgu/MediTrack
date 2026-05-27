@@ -236,6 +236,10 @@ DB entries start at SENT when the nurse submits the order.
 
 In production, DRAFT would be persisted in DB to support multi-device access and shift handover.
 
+### Stock Decrease on Delivery
+When an order is marked as DELIVERED, stock is decreased for each medicine item individually.
+**This is not wrapped in a transaction** — if one update fails midway, partial stock decreases may occur.
+
 ### Soft Delete for Medicines
 Medicines are never hard-deleted. Setting `is_active = false` preserves order history integrity.
 
