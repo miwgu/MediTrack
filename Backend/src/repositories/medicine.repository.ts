@@ -16,18 +16,31 @@ export const medicineRepository = {
     return result.rows[0] ?? null;
   },
 
+  //Find medicines by filter(Active medicines)
   async findByFilter(filters: MedicineFilters): Promise<Medicine[]> {
     const { search, form } = filters;
     const result = await db.query(
       `
       SELECT * FROM medicines
-      WHERE ($1::text IS NULL OR name ILIKE '%' || $1 || '%' OR atc_code ILIKE '%' || $1 || '%')
+      WHERE is_active = true
+      AND ($1::text IS NULL OR name ILIKE '%' || $1 || '%' OR atc_code ILIKE '%' || $1 || '%')
       AND ($2::text IS NULL OR form ILIKE '%' || $2 || '%')
       ORDER BY id ASC
       `,
       [search ?? null, form ?? null]
     );
     return result.rows;
+  },
+
+  async findByAtcCode(atc_code: string, excludeId?: number): Promise<Medicine | null> {
+    const result = await db.query(
+      `SELECT * FROM medicines 
+      WHERE atc_code = $1 
+      AND is_active = true
+      AND ($2::int IS NULL OR id != $2)`,
+      [atc_code, excludeId ?? null]
+    );
+    return result.rows[0] ?? null;
   },
 
   async create(data: CreateMedicineDTO): Promise<Medicine> {
@@ -49,54 +62,62 @@ export const medicineRepository = {
    return result.rows[0];
   },
 
-async update(id: number, data: UpdateMedicineDTO): Promise<Medicine> {
-  const fields = [];
-  const values = [];
-  let index = 1;
+  async update(id: number, data: UpdateMedicineDTO): Promise<Medicine> {
+    const fields = [];
+    const values = [];
+    let index = 1;
 
-  if (data.name !== undefined) {
-    fields.push(`name = $${index++}`);
-    values.push(data.name);
-  }
-  if (data.atc_code !== undefined) {
-    fields.push(`atc_code = $${index++}`);
-    values.push(data.atc_code);
-  }
-  if (data.form !== undefined) {
-    fields.push(`form = $${index++}`);
-    values.push(data.form);
-  }
-  if (data.strength !== undefined) {
-    fields.push(`strength = $${index++}`);
-    values.push(data.strength);
-  }
-  if (data.stock !== undefined) {
-    fields.push(`stock = $${index++}`);
-    values.push(data.stock);
-  }
-  if (data.threshold !== undefined) {
-    fields.push(`threshold = $${index++}`);
-    values.push(data.threshold);
-  }
+    if (data.name !== undefined) {
+      fields.push(`name = $${index++}`);
+      values.push(data.name);
+    }
+    if (data.atc_code !== undefined) {
+      fields.push(`atc_code = $${index++}`);
+      values.push(data.atc_code);
+    }
+    if (data.form !== undefined) {
+      fields.push(`form = $${index++}`);
+      values.push(data.form);
+    }
+    if (data.strength !== undefined) {
+      fields.push(`strength = $${index++}`);
+      values.push(data.strength);
+    }
+    if (data.stock !== undefined) {
+      fields.push(`stock = $${index++}`);
+      values.push(data.stock);
+    }
+    if (data.threshold !== undefined) {
+      fields.push(`threshold = $${index++}`);
+      values.push(data.threshold);
+    }
 
-  // when no fields are updated
-  if (fields.length === 0) {
-    const current = await db.query(
-      "SELECT * FROM medicines WHERE id = $1", [id]
+    // when no fields are updated
+    if (fields.length === 0) {
+      const current = await db.query(
+        "SELECT * FROM medicines WHERE id = $1", [id]
+      );
+      return current.rows[0];
+    }
+
+    fields.push(`updated_at = NOW()`);
+    values.push(id);
+
+    const result = await db.query(
+      `UPDATE medicines SET ${fields.join(", ")} WHERE id = $${index} RETURNING *`,
+      values
     );
-    return current.rows[0];
-  }
 
-  fields.push(`updated_at = NOW()`);
-  values.push(id);
+    return result.rows[0];
+  },
 
-  const result = await db.query(
-    `UPDATE medicines SET ${fields.join(", ")} WHERE id = $${index} RETURNING *`,
-    values
-  );
-
-  return result.rows[0];
-},
+  // Do not delete, just deactivate
+  async deactivate(id: number): Promise<void> {
+    await db.query(
+      "UPDATE medicines SET is_active = false, updated_at = NOW() WHERE id = $1",
+      [id]
+    );
+  },
 
   async deleteById(id: number): Promise<void> {
     await db.query(

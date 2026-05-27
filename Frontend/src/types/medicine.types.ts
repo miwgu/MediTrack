@@ -8,6 +8,7 @@ export type Medicine = {
   strength: string | null;
   stock: number;
   threshold: number;
+  is_active: boolean; 
   created_at?: string;
   updated_at?: string;
 };

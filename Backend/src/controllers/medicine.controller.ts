@@ -29,23 +29,32 @@ export const getMedicineById = async (req: Request,res: Response): Promise<void>
 };
 
 export const createMedicine = async (req: Request, res: Response): Promise<void> => {
-  const data: CreateMedicineDTO = req.body;
-
-  const created = await medicineService.create(data);
-  res.status(201).json(created);
+  try {
+    const data: CreateMedicineDTO = req.body;
+    const created = await medicineService.create(data);
+    res.status(201).json(created);
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
+  }
 };
 
 export const updateMedicine = async (req: Request, res: Response): Promise<void> => {
-  const id = Number(req.params.id);
-  const data: UpdateMedicineDTO = req.body;
-
-  const updated = await medicineService.update(id, data);
-  res.json(updated);
+  try {
+    const id = Number(req.params.id);
+    const data: UpdateMedicineDTO = req.body;
+    const updated = await medicineService.update(id, data);
+    res.json(updated);
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
+  }
 };
 
 export const deleteMedicine = async (req: Request, res: Response): Promise<void> => {
-  const id = Number(req.params.id);
-
-  await medicineService.delete(id);
-  res.status(204).send();
+  try {
+    const id = Number(req.params.id);
+    await medicineService.delete(id);
+    res.status(204).send();
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
+  }
 };
