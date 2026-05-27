@@ -4,7 +4,7 @@ export type Medicine = {
   id: number;
   name: string;
   atc_code: string;
-  form: string | null;
+  form: MedicineForm | null;
   strength: string | null;
   stock: number;
   threshold: number;

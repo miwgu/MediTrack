@@ -1,4 +1,4 @@
-import { Medicine, MedicineForm } from '../types/medicine.types';
+import { Medicine, MedicineForm, CreateMedicineDTO, UpdateMedicineDTO } from '../types/medicine.types';
 
 const BASE_URL = 'http://localhost:3000/api/medicines';
 
@@ -17,7 +17,7 @@ export const medicineApi = {
     return res.json();
   },
 
-  create: async (data: Omit<Medicine, 'id' | 'created_at' | 'updated_at'>): Promise<Medicine> => {
+  create: async (data: CreateMedicineDTO): Promise<Medicine> => {
     const res = await fetch(BASE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -26,7 +26,7 @@ export const medicineApi = {
     return res.json();
   },
 
-  update: async (id: number, data: Partial<Medicine>): Promise<Medicine> => {
+  update: async (id: number, data: UpdateMedicineDTO): Promise<Medicine> => {
     const res = await fetch(`${BASE_URL}/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },

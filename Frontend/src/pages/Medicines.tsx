@@ -9,6 +9,8 @@ import MedicineTable from '../components/medicine/MedicineTable';
 import { useRole } from '../context/RoleContext';
 import { useOrderRequest } from './../context/OrderRequestContext';
 import RequestToast from '../components/common/RequestToast';
+import MedicineFormModal from '../components/medicine/MedicineFormModal';
+import DeleteConfirmModal from '../components/medicine/DeleteConfirmModal';
 
 function Medicines() {
   const { role } = useRole();
@@ -17,6 +19,12 @@ function Medicines() {
   const [form, setForm] = useState<MedicineForm | ''>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [editingMedicine, setEditingMedicine] = useState<Medicine | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletingMedicine, setDeletingMedicine] = useState<Medicine | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const fetchMedicines = useCallback(async () => {
     setLoading(true);
@@ -49,19 +57,59 @@ function Medicines() {
     setToastShow(true);
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this medicine?')) return;
-    await medicineApi.delete(id);
-    fetchMedicines();
+  //--Farmacist can delete update and add new medicines--
+  const handleDeleteClick = (medicine: Medicine) => {
+    setDeletingMedicine(medicine);
+    setShowDeleteModal(true);
   };
 
+  const handleDeleteConfirm = async () => {
+    if (!deletingMedicine) return;
+    setDeleting(true);
+    try {
+      await medicineApi.delete(deletingMedicine.id);
+      setDeletingMedicine(null);
+      await fetchMedicines();// 1.refetch after delete a medicine -> new medicines list
+      setShowDeleteModal(false); // 2.close modal
+    } catch (err: any) {
+      console.error(err.message);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+
   const handleEdit = (medicine: Medicine) => {
-    // Modal logic — next step
-    console.log('Edit:', medicine);
+    setEditingMedicine(medicine);
+    setShowModal(true);
+  };
+
+  const handleAddNew = () => {
+    setEditingMedicine(null);
+    setShowModal(true);
+  };
+
+  const handleSaved = async() => {
+    await fetchMedicines();  // refetch
   };
 
   return (
-    <Container className="py-4">
+      <Container className="py-4">
+      <MedicineFormModal
+      show={showModal}
+      medicine={editingMedicine}
+      onSaved={handleSaved}
+      onClose={() => setShowModal(false)}
+    />
+
+      <DeleteConfirmModal
+      show={showDeleteModal}
+      medicine={deletingMedicine}
+      onClose={() => setShowDeleteModal(false)}
+      onConfirm={handleDeleteConfirm}
+      deleting={deleting}
+      error={deleteError}
+    />
 
       <RequestToast
       show={toastShow}
@@ -76,7 +124,7 @@ function Medicines() {
           <small className="text-muted">Inventory overview</small>
         </div>
         {role === 'PHARMACIST' && (
-          <Button variant="primary">+ Add Medicine</Button>
+          <Button variant="primary"　onClick={handleAddNew}>+ Add Medicine</Button>
         )}
       </div>
 
@@ -98,7 +146,7 @@ function Medicines() {
           medicines={medicines}
           onAddToOrder={handleAddToOrder}
           onEdit={handleEdit}
-          onDelete={handleDelete}
+          onDelete={handleDeleteClick}
         />
       )}
 

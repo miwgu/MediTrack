@@ -8,7 +8,7 @@ type Props = {
   medicines: Medicine[];
   onAddToOrder: (medicine: Medicine) => void;
   onEdit: (medicine: Medicine) => void;
-  onDelete: (id: number) => void;
+  onDelete: (medicine: Medicine) => void;
 };
 
 //const PAGE_SIZE = 10;
@@ -69,7 +69,7 @@ function MedicineTable({ medicines, onAddToOrder, onEdit, onDelete }: Props) {
                         <Button size="sm" variant="outline-secondary" onClick={() => onEdit(med)}>
                             Edit
                         </Button>
-                        <Button size="sm" variant="outline-danger" onClick={() => onDelete(med.id)}>
+                        <Button size="sm" variant="outline-danger" onClick={() => onDelete(med)}>
                             Delete
                         </Button>
                         </>
