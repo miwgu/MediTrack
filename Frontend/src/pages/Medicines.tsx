@@ -14,17 +14,30 @@ import DeleteConfirmModal from '../components/medicine/DeleteConfirmModal';
 
 function Medicines() {
   const { role } = useRole();
+  const { addItem } = useOrderRequest();
+
+  // Medicine list
   const [medicines, setMedicines] = useState<Medicine[]>([]);
-  const [search, setSearch] = useState('');
-  const [form, setForm] = useState<MedicineForm | ''>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Search filters
+  const [search, setSearch] = useState('');
+  const [form, setForm] = useState<MedicineForm | ''>('');
+
+  // Add / Edit modal
   const [showModal, setShowModal] = useState(false);
   const [editingMedicine, setEditingMedicine] = useState<Medicine | null>(null);
+
+  // Delete modal
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deletingMedicine, setDeletingMedicine] = useState<Medicine | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  // Toast
+  const [toastShow, setToastShow] = useState(false);
+  const [toastMedicine, setToastMedicine] = useState('');
 
   const fetchMedicines = useCallback(async () => {
     setLoading(true);
@@ -45,10 +58,6 @@ function Medicines() {
   useEffect(() => {
     fetchMedicines();
   }, [fetchMedicines]);
-
-  const { addItem } = useOrderRequest();
-  const [toastShow, setToastShow] = useState(false);
-  const [toastMedicine, setToastMedicine] = useState('');
   
   const handleAddToOrder = (medicine: Medicine) => {
     addItem(medicine)
@@ -66,6 +75,7 @@ function Medicines() {
   const handleDeleteConfirm = async () => {
     if (!deletingMedicine) return;
     setDeleting(true);
+    setDeleteError(null);
     try {
       await medicineApi.delete(deletingMedicine.id);
       setDeletingMedicine(null);
@@ -124,7 +134,7 @@ function Medicines() {
           <small className="text-muted">Inventory overview</small>
         </div>
         {role === 'PHARMACIST' && (
-          <Button variant="primary"　onClick={handleAddNew}>+ Add Medicine</Button>
+          <Button variant="primary" onClick={handleAddNew}>+ Add Medicine</Button>
         )}
       </div>
 
