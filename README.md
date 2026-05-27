@@ -265,6 +265,6 @@ In production, filtering should be enforced on the backend based on the authenti
 | Soft delete admin API | DB access only | Admin endpoint with role protection |
 | Medicine activation date | Not tracked | `activated_at` / `deactivated_at` timestamps |
 | Integration tests | Not implemented | Supertest for API endpoints |
-| E2E tests | Not implemented | Playwright for critical user flows |
-| Concurrent updates | Not handled | Optimistic locking / conflict resolution |
+| E2E tests | Not implemented | Cypress for critical user flows |
+| Concurrent updates | Not handled | Optimistic locking to prevent race conditions on stock updates |
 
