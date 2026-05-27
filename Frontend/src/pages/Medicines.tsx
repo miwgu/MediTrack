@@ -130,7 +130,7 @@ function Medicines() {
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h2 className="mb-0">💊 Medicines</h2>
+          <h2 className="mb-0">Medicines</h2>
           <small className="text-muted">Inventory overview</small>
         </div>
         {role === 'PHARMACIST' && (

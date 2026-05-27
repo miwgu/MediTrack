@@ -57,7 +57,7 @@ function Orders() {
 
       {/* Header */}
       <div className="mb-4">
-        <h2 className="mb-0">📋 Orders</h2>
+        <h2 className="mb-0">Orders</h2>
         <small className="text-muted">
           {role === 'NURSE'      && 'Your unit order history'}
           {role === 'PHARMACIST' && 'All orders — confirm pending requests'}

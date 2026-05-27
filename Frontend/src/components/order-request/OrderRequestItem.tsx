@@ -40,7 +40,11 @@ function OrderRequestItem({ item, onUpdateQuantity, onRemove }: Props) {
           </div>
 
           {/* Quantity control */}
-          <div className="d-flex align-items-center gap-2" style={{ width: '160px', justifyContent: 'flex-end' }}>
+          <div className="d-flex align-items-center gap-2" 
+                style={{ width: '220px',
+                  justifyContent: 'flex-end',
+                  flexShrink: 0, 
+                }}>
               <Form.Control
                 type="number"
                 min={1}
@@ -54,9 +58,18 @@ function OrderRequestItem({ item, onUpdateQuantity, onRemove }: Props) {
                     setInputValue(String(quantity));
                   }
                 }}
-                style={{ width: '70px', textAlign: 'center' }}
+                style={{ 
+                  width: '70px', 
+                  textAlign: 'center' 
+                }}
               />
-              <small className="text-muted" style={{ width: '50px' }}>
+              <small
+                className="text-muted text-start"
+                style={{
+                  width: '70px',
+                  display: 'inline-block',
+                }}
+              >
                 {getMedicineUnit(medicine.form as MedicineForm | null)}
               </small>
               <Button
