@@ -1,5 +1,6 @@
 import { medicineRepository } from '../repositories/medicine.repository';
 import { MedicineFilters, CreateMedicineDTO, UpdateMedicineDTO } from '../types/medicine.types';
+import { AppError } from '../middleware/errorHandler';
 
 export const medicineService = {
 
@@ -28,12 +29,12 @@ export const medicineService = {
    * @throws If name is missing, stock is negative, or ATC code already exists
    */
   create: async (data: CreateMedicineDTO) => {
-   if (!data.name) throw new Error("name is required");
-   if (data.stock < 0) throw new Error("stock must be >= 0");
+   if (!data.name) throw new AppError("name is required", 400);
+   if (data.stock < 0) throw new AppError("stock must be >= 0", 400);
 
    // check if atc_code is unique
    const existing = await medicineRepository.findByAtcCode(data.atc_code);
-   if (existing) throw new Error(`ATC code ${data.atc_code} is already in use`);
+   if (existing) throw new AppError(`ATC code ${data.atc_code} is already in use`,400);
 
    return medicineRepository.create(data);
  },
@@ -50,13 +51,13 @@ export const medicineService = {
 
     // Chech if medicine is active
     const medicine = await medicineRepository.findById(id);
-    if (!medicine) throw new Error("Medicine not found");
-    if (!medicine.is_active) throw new Error("Cannot update an inactive medicine");
+    if (!medicine) throw new AppError("Medicine not found", 404);
+    if (!medicine.is_active) throw new AppError("Cannot update an inactive medicine", 400);
 
     // check if atc_code is unique
     if (data.atc_code) {
       const existing = await medicineRepository.findByAtcCode(data.atc_code, id);
-      if (existing) throw new Error(`ATC code ${data.atc_code} is already in use`);
+      if (existing) throw new AppError(`ATC code ${data.atc_code} is already in use`, 400);
     }
 
    return medicineRepository.update(id, data);
@@ -69,6 +70,10 @@ export const medicineService = {
    * @throws If medicine not found or already inactive
    */
   delete: async (id: number) => {
+    const medicine = await medicineRepository.findById(id);
+    if (!medicine) throw new AppError("Medicine not found", 404);
+    if (!medicine.is_active) throw new AppError("Medicine is already inactive", 400);
+
     await medicineRepository.deactivate(id);
   },
 };
